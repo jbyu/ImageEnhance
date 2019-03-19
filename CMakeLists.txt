@@ -1,0 +1,36 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(imageEnhance)
+
+set(OpenCV_DIR "C:/_ThirdParty/opencv341/build")
+#set(OpenCV_STATIC ON)
+FIND_PACKAGE(OpenCV REQUIRED)
+
+if(MSVC)
+# First for the generic no-config case (e.g. with mingw)
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/bin )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/lib )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/lib )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+endif()
+
+INCLUDE_DIRECTORIES(./src)
+
+SET(SOURCE_FILES
+	./src/main.cpp
+	./src/ImageEnhance.cpp
+	)
+
+SET(ExeName "imageEnhanceTest")
+
+ADD_EXECUTABLE(${ExeName}  ${SOURCE_FILES})
+
+TARGET_LINK_LIBRARIES(${ExeName}  ${OpenCV_LIBS})
+
+set_target_properties(${ExeName}  PROPERTIES OUTPUT_NAME_DEBUG "${ExeName}D")
+
